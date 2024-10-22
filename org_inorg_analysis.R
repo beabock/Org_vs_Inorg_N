@@ -25,4 +25,5 @@ ds %>%
   theme(legend.position = "none")+
   labs(y = "Fungal Mass Gained", x = "Nitrogen Type")
 
-anova(lm(data = ds, Mass_Gained ~ condition))
+stat <- t.test(data = ds, Mass_Gained ~ condition)
+stat$estimate
