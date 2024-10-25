@@ -26,4 +26,10 @@ ds %>%
   labs(y = "Fungal Mass Gained", x = "Nitrogen Type")
 
 stat <- t.test(data = ds, Mass_Gained ~ condition)
-stat$estimate
+
+plot(lm(data = ds, Mass_Gained ~ condition)) #Look pretty good.
+
+ds %>%
+  ggplot(aes(x = Mass_Gained))+
+  geom_histogram(aes(fill = condition), binwidth = 0.015)
+#Not horribly different from Gaussian
