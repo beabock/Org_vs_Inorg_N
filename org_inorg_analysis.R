@@ -12,18 +12,27 @@ theme_set(theme_bw())
 
 ds <- read_xlsx("Org_Inorg_N.xlsx", sheet = 2)
 
-ds <- clean_names(ds)%>%
-  mutate(Mass_Gained = post_drying_mass_filter_and_fungi_g - filter_mass_g - 0.025) #0.025 is the estimate for the dried weight of the fungal inoculum plugs added to each flask
+avg_inoc_mass <- 0.0029175 #We weighed 4 same diameter inoculum plugs (dry weight), and this was the average
 
-ds %>%
+ds <- clean_names(ds)%>%
+  mutate(Mass_Gained = post_drying_mass_filter_and_fungi_g - filter_mass_g - avg_inoc_mass) #0.025 is the estimate for the dried weight of the fungal inoculum plugs added to each flask
+
+plot <- ds %>%
   ggplot(aes(x = condition, y = Mass_Gained, fill = condition))+
   geom_boxplot()+
-  scale_x_discrete(labels = c('Ammonium Sulfate', "Urea"))+
+  scale_fill_manual(values = c("#EBCC7F", "#7B98E6"))+
+  scale_x_discrete(labels = c('Ammonium Sulfate (Inorganic)', "Urea (Organic)"))+
   stat_n_text()+
+  geom_hline(yintercept = 0, linetype = "dashed")+
   # stat_compare_means(method = "anova")+
   geom_point(aes(shape = condition))+
   theme(legend.position = "none")+
   labs(y = "Fungal Mass Gained", x = "Nitrogen Type")
+
+plot
+
+ggsave(plot = plot, "org_inorg_N.png", width = 4, height = 3, units = "in", dpi = 500)
+
 
 stat <- t.test(data = ds, Mass_Gained ~ condition)
 
