@@ -21,17 +21,23 @@ plot <- ds %>%
   ggplot(aes(x = condition, y = Mass_Gained, fill = condition))+
   geom_boxplot()+
   scale_fill_manual(values = c("#EBCC7F", "#7B98E6"))+
-  scale_x_discrete(labels = c('Ammonium Sulfate (Inorganic)', "Urea (Organic)"))+
+  scale_x_discrete(labels = c('Ammonium sulfate (Inorganic)', "Urea (Organic)"))+
   stat_n_text()+
   geom_hline(yintercept = 0, linetype = "dashed")+
   # stat_compare_means(method = "anova")+
   geom_point(aes(shape = condition))+
-  theme(legend.position = "none")+
-  labs(y = "Fungal Mass Gained", x = "Nitrogen Type")
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 10),   # Axis titles size
+    axis.text = element_text(size = 10),    # Axis text size
+    plot.title = element_text(size = 16, face = "bold"), # Title size
+    strip.text = element_text(size = 12)    # Facet label size (if faceting)
+  )+
+  labs(y = "Fungal Mass Gained (g)", x = "Nitrogen Type")
 
 plot
 
-ggsave(plot = plot, "org_inorg_N.png", width = 4, height = 3, units = "in", dpi = 500)
+ggsave(plot = plot, "org_inorg_N.png", width = 5, height = 5, units = "in", dpi = 500)
 
 
 stat <- t.test(data = ds, Mass_Gained ~ condition)
